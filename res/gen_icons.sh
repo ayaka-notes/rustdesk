@@ -176,11 +176,16 @@ for entry in "mdpi:48" "hdpi:72" "xhdpi:96" "xxhdpi:144" "xxxhdpi:192"; do
 done
 
 # ---------- macOS legacy .icns ----------
+# Use full_squircle (rounded rect filling the whole 1024 canvas with ~11%
+# corner radius) rather than the padded squircle. macOS does NOT auto-round
+# app icons the way iOS does — the artwork must already be the final
+# squircle shape, edge-to-edge. A padded squircle ends up rendered as a
+# small white card floating inside macOS's default gray frame.
 echo "==> macOS .icns"
 ICNSET="$TMP/AppIcon.iconset"
 mkdir -p "$ICNSET"
 for s in 16 32 64 128 256 512 1024; do
-  build_icon $s "$ICNSET/icon_${s}.png" yes squircle
+  build_icon $s "$ICNSET/icon_${s}.png" yes full_squircle
 done
 png2icns "$TMP/AppIcon.icns" \
   $ICNSET/icon_16.png $ICNSET/icon_32.png \
