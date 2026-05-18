@@ -1308,7 +1308,11 @@ fn get_api_server_(api: String, custom: String) -> String {
             return format!("http://{}", s);
         }
     }
-    "https://admin.rustdesk.com".to_owned()
+    match option_env!("RUSTDESK_API_SERVER") {
+        Some(s) => s,
+        None => "https://admin.rustdesk.com",
+    }
+    .to_owned()
 }
 
 #[inline]
