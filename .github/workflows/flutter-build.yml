@@ -55,7 +55,7 @@ env:
   RUSTDESK_RS_PUB_KEY: "${{ secrets.RUSTDESK_RS_PUB_KEY }}"
   RUSTDESK_RENDEZVOUS_SERVER: "remote.ayaka.space"
   RUSTDESK_API_SERVER: "https://remote.ayaka.space"
-  RUSTDESK_APP_NAME: "RustDeskAyakaNotes"
+  RUSTDESK_APP_NAME: "RustDesk"
   RUSTDESK_ACCENT_ARGB: "0xFFFF5C8A"
   RUSTDESK_BUTTON_ARGB: "0xFFFF85A8"
 
