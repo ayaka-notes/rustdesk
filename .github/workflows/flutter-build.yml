@@ -1538,13 +1538,19 @@ jobs:
               export JOBS=""
             fi
             echo $JOBS
-            # Forward ayaka branding env vars into the docker container so
-            # option_env!() in libs/hbb_common/src/config.rs picks them up
-            # at compile time (run-on-arch-action does not inherit workflow env).
+            # Forward ayaka branding env vars into the docker container.
+            # run-on-arch-action does not inherit workflow env, so without
+            # these:
+            #   - option_env!() in libs/hbb_common/src/config.rs falls back
+            #     to upstream defaults (rs-ny.rustdesk.com, upstream pubkey)
+            #   - build.py sees no RUSTDESK_ACCENT_ARGB / RUSTDESK_BUTTON_ARGB
+            #     and emits no --dart-define, so flutter uses default blue.
             export RUSTDESK_RENDEZVOUS_SERVER="${{ env.RUSTDESK_RENDEZVOUS_SERVER }}"
             export RUSTDESK_RS_PUB_KEY="${{ secrets.RUSTDESK_RS_PUB_KEY }}"
             export RUSTDESK_API_SERVER="${{ env.RUSTDESK_API_SERVER }}"
             export RUSTDESK_APP_NAME="${{ env.RUSTDESK_APP_NAME }}"
+            export RUSTDESK_ACCENT_ARGB="${{ env.RUSTDESK_ACCENT_ARGB }}"
+            export RUSTDESK_BUTTON_ARGB="${{ env.RUSTDESK_BUTTON_ARGB }}"
             cargo build --locked --lib $JOBS --features hwcodec,flutter,unix-file-copy-paste --release
             rm -rf target/release/deps target/release/build
             rm -rf ~/.cargo
