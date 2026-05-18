@@ -255,11 +255,11 @@ class MyTheme {
   //   --dart-define=RUSTDESK_ACCENT_ARGB=0xFFFF5C8A
   static const int _accentArgb = int.fromEnvironment(
     "RUSTDESK_ACCENT_ARGB",
-    defaultValue: 0xFF0071FF,
+    defaultValue: 0xFFFF5C8A,
   );
   static const int _buttonArgb = int.fromEnvironment(
     "RUSTDESK_BUTTON_ARGB",
-    defaultValue: 0xFF2C8CFF,
+    defaultValue: 0xFFFF85A8,
   );
   static const Color accent = Color(_accentArgb);
   static const Color accent50 = Color((_accentArgb & 0x00FFFFFF) | 0x77000000);
