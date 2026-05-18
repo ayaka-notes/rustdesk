@@ -5,7 +5,7 @@
 #   RUSTDESK_RENDEZVOUS_SERVER  ID server hostname     (default: remote.ayaka.space)
 #   RUSTDESK_RS_PUB_KEY         hbbs public key        (default: project key)
 #   RUSTDESK_API_SERVER         API base URL           (default: https://remote.ayaka.space)
-#   RUSTDESK_APP_NAME           Internal app name      (default: RustDeskAyakaNotes)
+#   RUSTDESK_APP_NAME           Internal app name      (default: RustDesk)
 #   RUSTDESK_ACCENT_ARGB        UI accent color ARGB   (default: 0xFFFF5C8A pink)
 #   RUSTDESK_BUTTON_ARGB        UI button color ARGB   (default: 0xFFFF85A8)
 #
@@ -17,7 +17,7 @@ set -e
 export RUSTDESK_RENDEZVOUS_SERVER="${RUSTDESK_RENDEZVOUS_SERVER:-remote.ayaka.space}"
 : "${RUSTDESK_RS_PUB_KEY:?RUSTDESK_RS_PUB_KEY must be set (export it before running)}"
 export RUSTDESK_API_SERVER="${RUSTDESK_API_SERVER:-https://remote.ayaka.space}"
-export RUSTDESK_APP_NAME="${RUSTDESK_APP_NAME:-RustDeskAyakaNotes}"
+export RUSTDESK_APP_NAME="${RUSTDESK_APP_NAME:-RustDesk}"
 
 # Flutter compile-time vars (forwarded via FLUTTER_BUILD_DEFINES in build.py? No — see note below)
 export RUSTDESK_ACCENT_ARGB="${RUSTDESK_ACCENT_ARGB:-0xFFFF5C8A}"

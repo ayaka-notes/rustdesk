@@ -8,7 +8,7 @@ RD="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Bundle name produced by the rebranded Flutter build (must match
 # flutter/macos/Runner/Configs/AppInfo.xcconfig PRODUCT_NAME).
-AYAKA_BUNDLE_NAME="${AYAKA_BUNDLE_NAME:-RustDeskAyakaNotes}"
+AYAKA_BUNDLE_NAME="${AYAKA_BUNDLE_NAME:-RustDesk}"
 
 for patch in "$SCRIPT_DIR"/patches/hbb_common-*.patch; do
   [ -f "$patch" ] || continue

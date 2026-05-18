@@ -10,7 +10,7 @@ index 4be1cb4..797c345 100644
 +    pub static ref APP_NAME: RwLock<String> = RwLock::new(
 +        match option_env!("RUSTDESK_APP_NAME") {
 +            Some(s) => s,
-+            None => "RustDeskAyakaNotes",
++            None => "RustDesk",
 +        }.to_owned()
 +    );
      static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
