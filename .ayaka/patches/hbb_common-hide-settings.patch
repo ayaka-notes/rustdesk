@@ -1,0 +1,21 @@
+diff --git a/src/config.rs b/src/config.rs
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -67,7 +67,16 @@ lazy_static::lazy_static! {
+     pub static ref DEFAULT_DISPLAY_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+     pub static ref OVERWRITE_DISPLAY_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+     pub static ref DEFAULT_LOCAL_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+     pub static ref OVERWRITE_LOCAL_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+     pub static ref HARD_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+-    pub static ref BUILTIN_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
++    pub static ref BUILTIN_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new({
++        let mut m = HashMap::new();
++        // ayaka-notes: hide network/server/proxy/websocket UI so end users
++        // cannot view or change the rendezvous server, public key, or proxy.
++        m.insert("hide-network-settings".to_owned(), "Y".to_owned());
++        m.insert("hide-server-settings".to_owned(), "Y".to_owned());
++        m.insert("hide-proxy-settings".to_owned(), "Y".to_owned());
++        m.insert("hide-websocket-settings".to_owned(), "Y".to_owned());
++        m
++    });
+ }
