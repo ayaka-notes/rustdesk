@@ -46,6 +46,13 @@ env:
   MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}-2"
+  # Branding injection (ayaka-notes fork)
+  RUSTDESK_RS_PUB_KEY: "${{ secrets.RUSTDESK_RS_PUB_KEY }}"
+  RUSTDESK_RENDEZVOUS_SERVER: "remote.ayaka.space"
+  RUSTDESK_API_SERVER: "https://remote.ayaka.space"
+  RUSTDESK_APP_NAME: "RustDeskAyakaNotes"
+  RUSTDESK_ACCENT_ARGB: "0xFFFF5C8A"
+  RUSTDESK_BUTTON_ARGB: "0xFFFF85A8"
 
 jobs:
   generate-bridge:
@@ -91,6 +98,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Apply ayaka branding patches
+
+        shell: bash
+
+        run: ./.ayaka/apply-patches.sh
 
       - name: Restore bridge files
         uses: actions/download-artifact@master
@@ -313,6 +326,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Apply ayaka branding patches
+
+        shell: bash
+
+        run: ./.ayaka/apply-patches.sh
+
       - name: Install LLVM and Clang
         uses: rustdesk-org/install-llvm-action-32bit@master
         with:
@@ -462,6 +481,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Apply ayaka branding patches
+        shell: bash
+        run: ./.ayaka/apply-patches.sh
 
       - name: Install flutter
         uses: subosito/flutter-action@v2
@@ -533,7 +555,7 @@ jobs:
           pushd flutter
           # flutter build ipa --release --obfuscate --split-debug-info=./split-debug-info --no-codesign
           # for easy debugging
-          flutter build ipa --release --no-codesign
+          flutter build ipa --release --no-codesign --dart-define=RUSTDESK_ACCENT_ARGB=$RUSTDESK_ACCENT_ARGB --dart-define=RUSTDESK_BUTTON_ARGB=$RUSTDESK_BUTTON_ARGB
 
       # - name: Upload Artifacts
       #   # if: env.ANDROID_SIGNING_KEY != null && env.UPLOAD_ARTIFACT == 'true'
@@ -587,6 +609,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Apply ayaka branding patches
+
+        shell: bash
+
+        run: ./.ayaka/apply-patches.sh
 
       - name: Import the codesign cert
         if: env.MACOS_P12_BASE64 != null
@@ -901,6 +929,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Apply ayaka branding patches
+
+        shell: bash
+
+        run: ./.ayaka/apply-patches.sh
+
       - name: Install flutter
         uses: subosito/flutter-action@v2
         with:
@@ -1023,7 +1057,7 @@ jobs:
               cp ./target/${{ matrix.job.target }}/release/liblibrustdesk.so ./flutter/android/app/src/main/jniLibs/arm64-v8a/librustdesk.so
               # build flutter
               pushd flutter
-              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-arm64 --split-per-abi
+              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-arm64 --split-per-abi --dart-define=RUSTDESK_ACCENT_ARGB=$RUSTDESK_ACCENT_ARGB --dart-define=RUSTDESK_BUTTON_ARGB=$RUSTDESK_BUTTON_ARGB
               mv build/app/outputs/flutter-apk/app-arm64-v8a-${{ matrix.job.reltype }}.apk ../rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}${{ matrix.job.suffix }}.apk
             ;;
             armv7-linux-androideabi)
@@ -1032,7 +1066,7 @@ jobs:
               cp ./target/${{ matrix.job.target }}/release/liblibrustdesk.so ./flutter/android/app/src/main/jniLibs/armeabi-v7a/librustdesk.so
               # build flutter
               pushd flutter
-              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-arm --split-per-abi
+              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-arm --split-per-abi --dart-define=RUSTDESK_ACCENT_ARGB=$RUSTDESK_ACCENT_ARGB --dart-define=RUSTDESK_BUTTON_ARGB=$RUSTDESK_BUTTON_ARGB
               mv build/app/outputs/flutter-apk/app-armeabi-v7a-${{ matrix.job.reltype }}.apk ../rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}${{ matrix.job.suffix }}.apk
             ;;
             x86_64-linux-android)
@@ -1041,7 +1075,7 @@ jobs:
               cp ./target/${{ matrix.job.target }}/release/liblibrustdesk.so ./flutter/android/app/src/main/jniLibs/x86_64/librustdesk.so
               # build flutter
               pushd flutter
-              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-x64 --split-per-abi
+              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-x64 --split-per-abi --dart-define=RUSTDESK_ACCENT_ARGB=$RUSTDESK_ACCENT_ARGB --dart-define=RUSTDESK_BUTTON_ARGB=$RUSTDESK_BUTTON_ARGB
               mv build/app/outputs/flutter-apk/app-x86_64-${{ matrix.job.reltype }}.apk ../rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}${{ matrix.job.suffix }}.apk
             ;;
             i686-linux-android)
@@ -1050,7 +1084,7 @@ jobs:
               cp ./target/${{ matrix.job.target }}/release/liblibrustdesk.so ./flutter/android/app/src/main/jniLibs/x86/librustdesk.so
               # build flutter
               pushd flutter
-              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-x86 --split-per-abi
+              flutter build apk "--${{ matrix.job.reltype }}" --target-platform android-x86 --split-per-abi --dart-define=RUSTDESK_ACCENT_ARGB=$RUSTDESK_ACCENT_ARGB --dart-define=RUSTDESK_BUTTON_ARGB=$RUSTDESK_BUTTON_ARGB
               mv build/app/outputs/flutter-apk/app-x86-${{ matrix.job.reltype }}.apk ../rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}${{ matrix.job.suffix }}.apk
             ;;
           esac
@@ -1173,6 +1207,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Apply ayaka branding patches
+
+        shell: bash
+
+        run: ./.ayaka/apply-patches.sh
+
       - name: Install flutter
         uses: subosito/flutter-action@v2
         with:
@@ -1237,7 +1277,7 @@ jobs:
           fi
           # build flutter
           pushd flutter
-          flutter build apk "--${{ env.reltype }}" --target-platform android-arm64,android-arm,android-x64${{ env.x86_target }}
+          flutter build apk "--${{ env.reltype }}" --target-platform android-arm64,android-arm,android-x64${{ env.x86_target }} --dart-define=RUSTDESK_ACCENT_ARGB=$RUSTDESK_ACCENT_ARGB --dart-define=RUSTDESK_BUTTON_ARGB=$RUSTDESK_BUTTON_ARGB
           popd
           mkdir -p signed-apk
           mv ./flutter/build/app/outputs/flutter-apk/app-${{ env.reltype }}.apk signed-apk/rustdesk-${{ env.VERSION }}-universal${{ env.suffix }}.apk
@@ -1337,6 +1377,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Apply ayaka branding patches
+
+        shell: bash
+
+        run: ./.ayaka/apply-patches.sh
 
       - name: Set Swap Space
         if: ${{ matrix.job.arch == 'x86_64' }}
@@ -1668,6 +1714,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Apply ayaka branding patches
+
+        shell: bash
+
+        run: ./.ayaka/apply-patches.sh
+
       - name: Modify vcpkg.json for armv7
         if: matrix.job.vcpkg-triplet == 'arm-linux'
         run: |
@@ -1869,6 +1921,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Apply ayaka branding patches
+        shell: bash
+        run: ./.ayaka/apply-patches.sh
 
       - name: Download Binary
         uses: actions/download-artifact@master
@@ -1942,6 +1997,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Apply ayaka branding patches
+        shell: bash
+        run: ./.ayaka/apply-patches.sh
 
       - name: Download Binary
         uses: actions/download-artifact@master
@@ -2003,6 +2061,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Apply ayaka branding patches
+        shell: bash
+        run: ./.ayaka/apply-patches.sh
 
       - name: Prepare env
         run: |

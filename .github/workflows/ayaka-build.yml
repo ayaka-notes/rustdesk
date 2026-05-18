@@ -1,0 +1,20 @@
+name: Build RustDesk@ayaka-notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload-tag:
+        description: "Release tag name"
+        type: string
+        default: "ayaka-nightly"
+  push:
+    tags:
+      - "ayaka-v*"
+
+jobs:
+  build:
+    uses: ./.github/workflows/flutter-build.yml
+    secrets: inherit
+    with:
+      upload-artifact: true
+      upload-tag: ${{ inputs.upload-tag || github.ref_name }}
