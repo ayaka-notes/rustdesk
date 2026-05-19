@@ -110,5 +110,26 @@
 
   "_index_html_replacements": {
     "RustDesk Console": "Ayaka Console"
+  },
+
+  "_web_custom_config_comment": "Filled into static/web/index.html's {{CUSTOM_CONFIG}} placeholder. The Web Client V2 loader (js/dist/index.js -> Ko()) base64-decodes this then jsonDecode()s it, force-writing the 4 fields below into local settings on every load. Only these 4 keys are read; extras are ignored. // Values may be (a) a literal string (b) empty = no override (c) a ${LOCATION_*} marker that resolves in the BROWSER from window.location, so the web client adapts to whichever host serves it. Markers: ${LOCATION_HOSTNAME}, ${LOCATION_HOST}, ${LOCATION_ORIGIN}. When any value uses a marker, rebrand.py emits a tiny inline filler script (still pre-bakes if all values are literal). Env vars RUSTDESK_{RENDEZVOUS_SERVER,RELAY_SERVER,API_SERVER,RS_PUB_KEY} override per-field.",
+  "web_custom_config": {
+    "custom-rendezvous-server": "${LOCATION_HOSTNAME}",
+    "relay-server":             "${LOCATION_HOSTNAME}",
+    "api-server":               "${LOCATION_ORIGIN}",
+    "key":                      ""
+  },
+
+  "_session_bridge_comment": "Mirror admin (umi/antd) <-> Web Client V2 login state via same-origin localStorage. The two upstream apps store the bearer token under different keys; this script syncs them on page load + on cross-tab 'storage' events so logging in on either propagates to the other. Sentinels are CI guards: rebrand.py greps the rebuilt output for these substrings, exits non-zero if upstream renames the key (mirror would silently no-op otherwise). Disable by setting enabled:false.",
+  "session_bridge": {
+    "enabled":   true,
+    "admin_key": "access_token",
+    "web_key":   "wc-option:local:access_token",
+    "sentinels": [
+      { "in": "umi.*.js",             "contains": "\"access_token\"" },
+      { "in": "umi.*.js",             "contains": "localStorage.setItem" },
+      { "in": "web/js/dist/index.js", "contains": "\"option:local:access_token\"" },
+      { "in": "web/js/dist/index.js", "contains": "\"wc-\"" }
+    ]
   }
 }
