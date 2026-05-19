@@ -161,6 +161,13 @@ convert $TMP/ico_16.png $TMP/ico_32.png $TMP/ico_48.png \
 build_icon 32 "$TMP/tray_32.png" yes full_squircle
 convert "$TMP/tray_32.png" "$RD/res/tray-icon.ico"
 
+# Flutter home-page logo — flutter/lib/common.dart loadLogo() loads
+# assets/logo.png and renders it inside a 300x60 box on the desktop
+# home page left column. Logo only, transparent, no background card.
+convert -size 120x120 xc:none \
+        \( "$TMP/logo_1024.png" -resize 120x120 \) \
+        -gravity center -composite "$RD/flutter/assets/logo.png"
+
 # macOS tray PNGs — logo-only on transparent canvas.
 # These are rendered as TEMPLATE images by macOS (see src/tray.rs
 # with_icon_as_template(true)), so every non-transparent pixel becomes
