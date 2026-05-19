@@ -63,6 +63,22 @@ def build_hex_pattern(color_map: dict[str, str]):
     return pattern, norm
 
 
+def build_int_pattern(int_map: dict):
+    """Match decimal ARGB integers used by Flutter web's compiled `Color(N)` constants.
+
+    Keys may be JSON ints or quoted decimal strings; values likewise. Only integers
+    that already appear non-digit-bounded in the file get replaced, so an int like
+    4280391411 won't accidentally collide with a different decimal embedded inside
+    a longer numeric literal.
+    """
+    if not int_map:
+        return None, {}
+    norm = {int(k): int(v) for k, v in int_map.items()}
+    keys = sorted((str(k) for k in norm.keys()), key=len, reverse=True)
+    pattern = re.compile(r"(?<!\d)(" + "|".join(keys) + r")(?!\d)")
+    return pattern, norm
+
+
 def build_rgb_pattern(rgb_map: dict[str, str]):
     """Match `r, g, b` triplets ignoring whitespace inside rgb()/rgba()."""
     if not rgb_map:
@@ -77,7 +93,7 @@ def build_rgb_pattern(rgb_map: dict[str, str]):
     return pattern, norm
 
 
-def rewrite_text(content: str, hex_re, hex_map, rgb_re, rgb_map, extra: dict[str, str]) -> tuple[str, int]:
+def rewrite_text(content: str, hex_re, hex_map, int_re, int_map, rgb_re, rgb_map, extra: dict[str, str]) -> tuple[str, int]:
     n = 0
     if hex_re is not None:
         def hex_sub(m):
@@ -85,6 +101,12 @@ def rewrite_text(content: str, hex_re, hex_map, rgb_re, rgb_map, extra: dict[str
             n += 1
             return hex_map[m.group(0).lower()]
         content = hex_re.sub(hex_sub, content)
+    if int_re is not None:
+        def int_sub(m):
+            nonlocal n
+            n += 1
+            return str(int_map[int(m.group(0))])
+        content = int_re.sub(int_sub, content)
     if rgb_re is not None:
         def rgb_sub(m):
             nonlocal n
@@ -102,7 +124,7 @@ def rewrite_text(content: str, hex_re, hex_map, rgb_re, rgb_map, extra: dict[str
     return content, n
 
 
-def walk_and_rewrite(out_dir: Path, hex_re, hex_map, rgb_re, rgb_map, html_extra) -> tuple[int, int]:
+def walk_and_rewrite(out_dir: Path, hex_re, hex_map, int_re, int_map, rgb_re, rgb_map, html_extra) -> tuple[int, int]:
     files_touched = 0
     total_subs = 0
     for path in out_dir.rglob("*"):
@@ -118,7 +140,7 @@ def walk_and_rewrite(out_dir: Path, hex_re, hex_map, rgb_re, rgb_map, html_extra
             continue
         # index.html gets the extra string replacements (e.g. title)
         extra = html_extra if path.name == "index.html" else {}
-        new, n = rewrite_text(raw, hex_re, hex_map, rgb_re, rgb_map, extra)
+        new, n = rewrite_text(raw, hex_re, hex_map, int_re, int_map, rgb_re, rgb_map, extra)
         if n > 0:
             path.write_text(new, encoding="utf-8")
             files_touched += 1
@@ -166,11 +188,12 @@ def main() -> int:
 
     mapping = load_mapping(args.mapping)
     hex_re, hex_map = build_hex_pattern(mapping.get("colors", {}))
+    int_re, int_map = build_int_pattern(mapping.get("int_argb", {}))
     rgb_re, rgb_map = build_rgb_pattern(mapping.get("rgb", {}))
     html_extra = mapping.get("_index_html_replacements", {})
 
     print(f"==> rewriting text files (mapping: {args.mapping.name})")
-    files, subs = walk_and_rewrite(args.dst, hex_re, hex_map, rgb_re, rgb_map, html_extra)
+    files, subs = walk_and_rewrite(args.dst, hex_re, hex_map, int_re, int_map, rgb_re, rgb_map, html_extra)
     print(f"    {subs} substitutions across {files} files")
 
     print(f"==> overlaying branded assets from {args.assets}")

@@ -18,7 +18,19 @@
 
     "#0071FF": "#FF5C8A",
     "#00BFE1": "#FFADC4",
-    "#004BA6": "#C93F6C"
+    "#004BA6": "#C93F6C",
+
+    "#0175C2": "#FF5C8A",
+    "#00B6F0": "#FF5C8A"
+  },
+
+  "_int_argb_comment": "Decimal ARGB ints used by Flutter web's compiled Color(N) constants in static/web/main.dart.js. Source hex -> dest hex shown for sanity.",
+  "int_argb": {
+    "4278219263": 4294925450,
+    "4278239201": 4294925450,
+    "4278236912": 4294925450,
+    "4280391411": 4294925450,
+    "4282557941": 4294938030
   },
 
   "rgb": {
