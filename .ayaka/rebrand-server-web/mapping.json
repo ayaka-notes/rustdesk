@@ -1,0 +1,36 @@
+{
+  "_comment": "antd / rustdesk-server-pro blue tokens -> ayaka pink ramp. Edit this file (or copy and pass --mapping) to switch themes. Keys are case-insensitive and matched as whole hex tokens.",
+
+  "colors": {
+    "#E6F4FF": "#FFE6ED",
+    "#BAE0FF": "#FFCEDB",
+    "#91CAFF": "#FFAEC5",
+    "#69B1FF": "#FF8DAE",
+    "#4096FF": "#FF7099",
+    "#1677FF": "#FF5C8A",
+    "#0958D9": "#C93F6C",
+    "#003EB3": "#962D51",
+    "#002C8C": "#631C35",
+    "#001D66": "#3D0F1F",
+
+    "#1890FF": "#FF5C8A",
+    "#2EABFF": "#FF7099",
+
+    "#0071FF": "#FF5C8A",
+    "#00BFE1": "#FFADC4",
+    "#004BA6": "#C93F6C"
+  },
+
+  "rgb": {
+    "22,119,255":  "255,92,138",
+    "24,144,255":  "255,92,138",
+    "46,171,255":  "255,112,153",
+    "9,88,217":    "201,63,108",
+    "0,113,255":   "255,92,138",
+    "0,191,225":   "255,173,196"
+  },
+
+  "_index_html_replacements": {
+    "RustDesk Console": "Ayaka Console"
+  }
+}
