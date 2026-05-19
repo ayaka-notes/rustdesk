@@ -161,9 +161,22 @@ convert $TMP/ico_16.png $TMP/ico_32.png $TMP/ico_48.png \
 build_icon 32 "$TMP/tray_32.png" yes full_squircle
 convert "$TMP/tray_32.png" "$RD/res/tray-icon.ico"
 
-# macOS tray PNGs — original sizes 60 (dark) and 48 (light)
-build_icon 60 "$RD/res/mac-tray-dark-x2.png"  yes full_squircle
-build_icon 48 "$RD/res/mac-tray-light-x2.png" yes full_squircle
+# macOS tray PNGs — logo-only on transparent canvas.
+# These are rendered as TEMPLATE images by macOS (see src/tray.rs
+# with_icon_as_template(true)), so every non-transparent pixel becomes
+# white (dark menu bar) / black (light menu bar). If we used full_squircle
+# here, the white card behind the logo would fill the entire alpha channel
+# and the menu bar would show a solid white blob instead of the ring shape.
+# Logo at ~85% of canvas so the ring reads clearly at small menu-bar sizes.
+{
+  for entry in "60:$RD/res/mac-tray-dark-x2.png" "48:$RD/res/mac-tray-light-x2.png"; do
+    sz=${entry%%:*}; out=${entry#*:}
+    logo=$(( sz * 85 / 100 ))
+    convert -size ${sz}x${sz} xc:none \
+            \( "$TMP/logo_1024.png" -resize ${logo}x${logo} \) \
+            -gravity center -composite "$out"
+  done
+}
 
 # ---------- Android ic_launcher_round.png (per dpi, circle) ----------
 # flutter_launcher_icons does not generate the round variant, so we do it
