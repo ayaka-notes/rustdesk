@@ -558,21 +558,37 @@ jobs:
           # for easy debugging
           flutter build ipa --release --no-codesign --dart-define=RUSTDESK_ACCENT_ARGB=$RUSTDESK_ACCENT_ARGB --dart-define=RUSTDESK_BUTTON_ARGB=$RUSTDESK_BUTTON_ARGB
 
-      # - name: Upload Artifacts
-      #   # if: env.ANDROID_SIGNING_KEY != null && env.UPLOAD_ARTIFACT == 'true'
-      #   uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-      #   with:
-      #     name: rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.apk
-      #     path: flutter/build/ios/ipa/*.ipa
+      - name: Package unsigned ipa
+        shell: bash
+        run: |
+          set -e
+          APP_PATH=$(find flutter/build/ios/archive -type d -name "*.app" | head -n1)
+          if [ -z "$APP_PATH" ]; then
+            APP_PATH=$(find flutter/build/ios -type d -name "Runner.app" | head -n1)
+          fi
+          echo "Found app at: $APP_PATH"
+          test -n "$APP_PATH"
+          STAGE=$(mktemp -d)
+          mkdir -p "$STAGE/Payload"
+          cp -R "$APP_PATH" "$STAGE/Payload/"
+          mkdir -p flutter/build/ios/ipa
+          (cd "$STAGE" && zip -qr "$GITHUB_WORKSPACE/flutter/build/ios/ipa/rustdesk-${{ env.VERSION }}-unsigned.ipa" Payload)
+          ls -lh flutter/build/ios/ipa/
 
-      # - name: Publish ipa package
-      #   # if: env.ANDROID_SIGNING_KEY != null && env.UPLOAD_ARTIFACT == 'true'
-      #   uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
-      #   with:
-      #     prerelease: true
-      #     tag_name: ${{ env.TAG_NAME }}
-      #     files: |
-      #       flutter/build/ios/ipa/*.ipa
+      - name: Upload unsigned ipa Artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: rustdesk-${{ env.VERSION }}-unsigned-ios
+          path: flutter/build/ios/ipa/*.ipa
+
+      - name: Publish unsigned ipa to release
+        if: env.UPLOAD_ARTIFACT == 'true'
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
+        with:
+          prerelease: true
+          tag_name: ${{ env.TAG_NAME }}
+          files: |
+            flutter/build/ios/ipa/*.ipa
 
 
   build-for-macOS:
