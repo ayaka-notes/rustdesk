@@ -293,6 +293,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
     final enable2fa = bind.mainHasValid2FaSync();
     final List<AbstractSettingsTile> tfaTiles = [
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         title: Text(translate('enable-2fa-title')),
         initialValue: enable2fa,
         onToggle: (v) async {
@@ -312,6 +313,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
       ),
       if (enable2fa)
         SettingsTile.switchTile(
+          activeSwitchColor: MyTheme.accent,
           title: Text(translate('Telegram bot')),
           initialValue: bind.mainHasValidBotSync(),
           onToggle: (v) async {
@@ -331,6 +333,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
         ),
       if (enable2fa)
         SettingsTile.switchTile(
+          activeSwitchColor: MyTheme.accent,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -361,6 +364,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
     ];
     final List<AbstractSettingsTile> shareScreenTiles = [
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         title: Text(translate('Deny LAN discovery')),
         initialValue: _denyLANDiscovery,
         onToggle: isOptionFixed(kOptionEnableLanDiscovery)
@@ -377,6 +381,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
               },
       ),
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         title: Row(children: [
           Expanded(child: Text(translate('Use IP Whitelisting'))),
           Offstage(
@@ -400,6 +405,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
         },
       ),
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         title: Text(translate('Adaptive bitrate')),
         initialValue: _enableAbr,
         onToggle: isOptionFixed(kOptionEnableAbr)
@@ -413,6 +419,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
               },
       ),
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         title: Text(translate('Enable recording session')),
         initialValue: _enableRecordSession,
         onToggle: isOptionFixed(kOptionEnableRecordSession)
@@ -427,6 +434,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
               },
       ),
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -474,6 +482,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
               },
       ),
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -525,6 +534,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
       enhancementsTiles.insert(
           0,
           SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               initialValue: _ignoreBatteryOpt,
               title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -560,6 +570,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
               }));
     }
     enhancementsTiles.add(SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         initialValue: _enableStartOnBoot,
         title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(translate('Start on boot')),
@@ -595,6 +606,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
     if (!bind.isCustomClient()) {
       enhancementsTiles.add(
         SettingsTile.switchTile(
+          activeSwitchColor: MyTheme.accent,
           initialValue: _checkUpdateOnStartup,
           title:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -610,6 +622,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
 
     enhancementsTiles.add(
       SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         initialValue: _showTerminalExtraKeys,
         title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(translate('Show terminal extra keys')),
@@ -642,6 +655,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
     }
 
     enhancementsTiles.add(SettingsTile.switchTile(
+        activeSwitchColor: MyTheme.accent,
         initialValue: !_floatingWindowDisabled,
         title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(translate('Floating window')),
@@ -730,6 +744,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                 }),
           if (!disabledSettings && !_hideNetwork && !_hideWebSocket)
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title: Text(translate('Use WebSocket')),
               initialValue: _allowWebSocket,
               onToggle: isOptionFixed(kOptionAllowWebSocket)
@@ -745,6 +760,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
             ),
           if (!_isUsingPublicServer)
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title: Text(translate('Allow insecure TLS fallback')),
               initialValue: _allowInsecureTlsFallback,
               onToggle: isOptionFixed(kOptionAllowInsecureTLSFallback)
@@ -761,6 +777,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
             ),
           if (isAndroid && !outgoingOnly && !_isUsingPublicServer)
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title: Text(translate('Disable UDP')),
               initialValue: _disableUdp,
               onToggle: isOptionFixed(kOptionDisableUdp)
@@ -777,6 +794,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
             ),
           if (!incomingOnly)
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title: Text(translate('Enable UDP hole punching')),
               initialValue: _enableUdpPunch,
               onToggle: (v) async {
@@ -790,6 +808,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
             ),
           if (!incomingOnly)
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title: Text(translate('Enable IPv6 P2P connection')),
               initialValue: _enableIpv6Punch,
               onToggle: (v) async {
@@ -821,6 +840,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
           ),
           if (!bind.isDisableAccount())
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title: Text(translate('note-at-conn-end-tip')),
               initialValue: _allowAskForNoteAtEndOfConnection,
               onToggle: (v) async {
@@ -839,6 +859,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
             ),
           if (!incomingOnly)
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title:
                   Text(translate('keep-awake-during-outgoing-sessions-label')),
               initialValue: _preventSleepWhileConnected,
@@ -854,6 +875,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
         if (isAndroid)
           SettingsSection(title: Text(translate('Hardware Codec')), tiles: [
             SettingsTile.switchTile(
+              activeSwitchColor: MyTheme.accent,
               title: Text(translate('Enable hardware codec')),
               initialValue: _enableHardwareCodec,
               onToggle: isOptionFixed(kOptionEnableHwcodec)
@@ -874,6 +896,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
             tiles: [
               if (!outgoingOnly)
                 SettingsTile.switchTile(
+                  activeSwitchColor: MyTheme.accent,
                   title:
                       Text(translate('Automatically record incoming sessions')),
                   initialValue: _autoRecordIncomingSession,
@@ -895,6 +918,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                 ),
               if (!incomingOnly)
                 SettingsTile.switchTile(
+                  activeSwitchColor: MyTheme.accent,
                   title:
                       Text(translate('Automatically record outgoing sessions')),
                   initialValue: _autoRecordOutgoingSession,
@@ -1224,6 +1248,7 @@ class __DisplayPageState extends State<_DisplayPage> {
     final value = bind.mainGetUserDefaultOption(key: key) == 'Y';
     final isOptFixed = isOptionFixed(key);
     return SettingsTile.switchTile(
+      activeSwitchColor: MyTheme.accent,
       initialValue: value,
       title: Text(translate(label)),
       onToggle: isOptFixed
