@@ -21,6 +21,11 @@ import { MIRRORS, DEFAULT_MIRROR_ID } from "@/data/mirrors";
 const { Header, Content, Footer } = Layout;
 const { Text } = Typography;
 
+// Vite's configured base ("/" for Docker, "/rustdesk/" for GitHub Pages).
+// Asset paths in JSX must be prefixed with this — Vite only rewrites
+// root-absolute URLs inside index.html, not string literals in components.
+const BASE = import.meta.env.BASE_URL;
+
 // Best-guess UA detection so the tile for the user's OS opens by default.
 function detectOs(): OsKey {
   const ua = navigator.userAgent.toLowerCase();
@@ -75,7 +80,7 @@ export default function App() {
               boxShadow: "0 2px 7px rgba(255, 140, 170, 0.22)",
             }}
           >
-            <img src="/logo.svg" width={17} height={17} alt="RustDesk" />
+            <img src={`${BASE}logo.svg`} width={17} height={17} alt="RustDesk" />
           </span>
           <span
             style={{
@@ -100,7 +105,7 @@ export default function App() {
             }}
           >
             <img
-              src="/avatar.png"
+              src={`${BASE}avatar.png`}
               alt="ayaka-notes"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
@@ -159,7 +164,7 @@ export default function App() {
           }}
         >
           <img
-            src="/logo.svg"
+            src={`${BASE}logo.svg`}
             width={84}
             height={84}
             alt=""
