@@ -1,0 +1,64 @@
+name: Build & publish download portal
+
+# Builds the RustDesk download portal (portal/) as a Docker image and
+# publishes it to GHCR. Internal-use image for the ayaka-notes deployment.
+#
+# Scoped to portal/** so it never fires for changes to the RustDesk client
+# source — those are handled by ayaka-build.yml / flutter-*.yml.
+
+on:
+  push:
+    branches: [ayaka-v1.4.6]
+    paths:
+      - 'portal/**'
+      - '.github/workflows/portal.yml'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE: ${{ github.repository_owner }}/rustdesk-portal
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=short
+
+      - name: Build & push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./portal
+          file: ./portal/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=portal
+          cache-to: type=gha,scope=portal,mode=max
+          # Suppress SBOM/provenance attestations — they add bogus
+          # "unknown/unknown" manifest entries on the GHCR package page.
+          provenance: false
+          sbom: false
