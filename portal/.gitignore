@@ -1,0 +1,12 @@
+node_modules
+dist
+.DS_Store
+*.log
+tsconfig.tsbuildinfo
+downloads/*
+!downloads/.gitkeep
+
+# The root rustdesk repo's .gitignore ignores *png / *svg globally.
+# Re-include the portal's own brand assets so they ship with the site.
+!public/*.svg
+!public/*.png

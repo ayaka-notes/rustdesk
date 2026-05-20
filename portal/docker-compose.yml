@@ -1,0 +1,12 @@
+services:
+  portal:
+    build: .
+    image: rustdesk-download:local
+    container_name: rustdesk-download
+    restart: unless-stopped
+    ports:
+      - "8090:80"
+    volumes:
+      # Drop installer files here. Filenames must match what
+      # src/data/releases.ts (or /downloads/releases.json) references.
+      - ./downloads:/srv/downloads:ro
