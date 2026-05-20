@@ -1,0 +1,74 @@
+name: Deploy portal to GitHub Pages
+
+# Publishes the download portal (portal/) to GitHub Pages, served at
+# https://ayaka-notes.github.io/rustdesk/.
+#
+# The portal is a project page (subpath /rustdesk/), so it MUST be built
+# with base=/rustdesk/ — see PORTAL_BASE below and vite.config.ts. The
+# Docker image (portal.yml) keeps base=/ and is unaffected.
+
+on:
+  push:
+    branches: [ayaka-v1.4.6]
+    paths:
+      - 'portal/**'
+      - '.github/workflows/portal-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; cancel an in-progress run if a new one starts.
+concurrency:
+  group: portal-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Build (base=/rustdesk/ for the project page subpath)
+        run: npm run build
+        env:
+          PORTAL_BASE: /rustdesk/
+
+      - name: Configure Pages
+        # enablement: true turns Pages on for the repo if it isn't already,
+        # so the first run doesn't need a manual Settings -> Pages toggle.
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: portal/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
