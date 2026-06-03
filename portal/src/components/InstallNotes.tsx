@@ -82,18 +82,18 @@ function LinuxGuide() {
     <>
       <Paragraph style={{ marginBottom: 8 }}>Debian / Ubuntu:</Paragraph>
       <CodeBlock
-        code={`sudo apt install ./rustdesk-1.4.6-x86_64.deb
+        code={`sudo apt install ./rustdesk-1.4.7-x86_64.deb
 # 装完会自动注册 systemd 服务,开机自启`}
       />
       <Paragraph style={{ marginTop: 12, marginBottom: 8 }}>Fedora / RHEL / openSUSE:</Paragraph>
       <CodeBlock
-        code={`sudo dnf install ./rustdesk-1.4.6-x86_64.rpm
+        code={`sudo dnf install ./rustdesk-1.4.7-x86_64.rpm
 # 或 sudo zypper install`}
       />
       <Paragraph style={{ marginTop: 12, marginBottom: 8 }}>AppImage(免发行版依赖):</Paragraph>
       <CodeBlock
-        code={`chmod +x rustdesk-1.4.6-x86_64.AppImage
-./rustdesk-1.4.6-x86_64.AppImage`}
+        code={`chmod +x rustdesk-1.4.7-x86_64.AppImage
+./rustdesk-1.4.7-x86_64.AppImage`}
       />
     </>
   );

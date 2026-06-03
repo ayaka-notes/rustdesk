@@ -14,7 +14,7 @@ npm run dev   # http://localhost:5173
 
 ```bash
 # 1. 把安装包放进 ./downloads/
-#    比如 rustdesk-1.4.6-x86_64.deb / rustdesk-1.4.6-aarch64.dmg / ...
+#    比如 rustdesk-1.4.7-x86_64.deb / rustdesk-1.4.7-aarch64.dmg / ...
 #    文件名必须和 src/data/releases.ts 里的对得上。
 
 # 2. 起服务
