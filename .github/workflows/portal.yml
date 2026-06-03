@@ -10,7 +10,7 @@ name: Portal — build & publish
 
 on:
   push:
-    branches: [ayaka-v1.4.6]
+    branches: ['ayaka-v*']
     paths:
       - 'portal/**'
       - '.github/workflows/portal.yml'
