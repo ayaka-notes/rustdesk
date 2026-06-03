@@ -1,11 +1,10 @@
 // Static release manifest.
 //
-// Download URLs point at GitHub Release assets of the ayaka-notes/rustdesk
-// fork. The asset filenames below are the *actual* names attached to the
-// `ayaka-v1.4.7` release — verified against the GitHub API, not guessed.
-// If you cut a new release, bump RELEASE_TAG / VERSION and re-check names
-// (the upstream RustDesk CI names a few assets inconsistently, e.g. the
-// macOS dmg carries a doubled arch suffix).
+// All asset filenames are derived from VERSION via the asset() helper,
+// so a release bump only requires changing VERSION + RELEASE_TAG below.
+// Verify size figures against the GitHub API after bumping — upstream
+// RustDesk CI names a few assets inconsistently (e.g. the macOS dmg
+// carries a doubled arch suffix, which is intentional and preserved).
 
 export type OsKey = "windows" | "macos" | "linux" | "android" | "ios";
 
@@ -29,12 +28,19 @@ export const VERSION = "1.4.7";
 
 // GitHub Release this portal links to.
 export const RELEASE_REPO = "ayaka-notes/rustdesk";
-export const RELEASE_TAG = "ayaka-v1.4.7";
+export const RELEASE_TAG = `ayaka-v${VERSION}`;
 export const RELEASE_PAGE = `https://github.com/${RELEASE_REPO}/releases/tag/${RELEASE_TAG}`;
 
 // Build a release-asset download URL from its exact attached filename.
 const dl = (filename: string): string =>
   `https://github.com/${RELEASE_REPO}/releases/download/${RELEASE_TAG}/${filename}`;
+
+// Single source of truth for the rustdesk-<version>-<suffix> file naming
+// scheme. Pass only the suffix; filename + url are derived.
+const asset = (suffix: string): Pick<Asset, "filename" | "url"> => {
+  const filename = `rustdesk-${VERSION}-${suffix}`;
+  return { filename, url: dl(filename) };
+};
 
 export const RELEASES: PlatformGroup[] = [
   {
@@ -44,25 +50,22 @@ export const RELEASES: PlatformGroup[] = [
     assets: [
       {
         label: "Installer (MSI)",
-        filename: "rustdesk-1.4.7-x86_64.msi",
         arch: "x86_64",
-        url: dl("rustdesk-1.4.7-x86_64.msi"),
+        ...asset("x86_64.msi"),
         size: "23.4 MB",
         notes: "推荐:静默安装、自动启动后台服务",
       },
       {
         label: "Portable (EXE)",
-        filename: "rustdesk-1.4.7-x86_64.exe",
         arch: "x86_64",
-        url: dl("rustdesk-1.4.7-x86_64.exe"),
+        ...asset("x86_64.exe"),
         size: "23.0 MB",
         notes: "免安装,适合临时 / U 盘场景",
       },
       {
         label: "32-bit (Sciter)",
-        filename: "rustdesk-1.4.7-x86-sciter.exe",
         arch: "x86",
-        url: dl("rustdesk-1.4.7-x86-sciter.exe"),
+        ...asset("x86-sciter.exe"),
         size: "11.2 MB",
         notes: "老旧 32 位系统;使用旧版 Sciter 界面",
       },
@@ -75,17 +78,15 @@ export const RELEASES: PlatformGroup[] = [
     assets: [
       {
         label: "Apple Silicon",
-        filename: "rustdesk-1.4.7-aarch64-aarch64.dmg",
         arch: "aarch64",
-        url: dl("rustdesk-1.4.7-aarch64-aarch64.dmg"),
+        ...asset("aarch64-aarch64.dmg"),
         size: "24.9 MB",
         notes: "首次打开:右键 → 打开,允许未知开发者",
       },
       {
         label: "Intel",
-        filename: "rustdesk-1.4.7-x86_64-x86_64.dmg",
         arch: "x86_64",
-        url: dl("rustdesk-1.4.7-x86_64-x86_64.dmg"),
+        ...asset("x86_64-x86_64.dmg"),
         size: "31.1 MB",
       },
     ],
@@ -97,31 +98,27 @@ export const RELEASES: PlatformGroup[] = [
     assets: [
       {
         label: "Debian / Ubuntu (deb)",
-        filename: "rustdesk-1.4.7-x86_64.deb",
         arch: "x86_64",
-        url: dl("rustdesk-1.4.7-x86_64.deb"),
+        ...asset("x86_64.deb"),
         size: "22.1 MB",
-        notes: "sudo apt install ./rustdesk-1.4.7-x86_64.deb",
+        notes: `sudo apt install ./rustdesk-${VERSION}-x86_64.deb`,
       },
       {
         label: "Debian / Ubuntu (ARM64)",
-        filename: "rustdesk-1.4.7-aarch64.deb",
         arch: "aarch64",
-        url: dl("rustdesk-1.4.7-aarch64.deb"),
+        ...asset("aarch64.deb"),
         size: "20.5 MB",
       },
       {
         label: "Fedora / RHEL (rpm)",
-        filename: "rustdesk-1.4.7-0.x86_64.rpm",
         arch: "x86_64",
-        url: dl("rustdesk-1.4.7-0.x86_64.rpm"),
+        ...asset("0.x86_64.rpm"),
         size: "29.8 MB",
       },
       {
         label: "AppImage (通用)",
-        filename: "rustdesk-1.4.7-x86_64.AppImage",
         arch: "x86_64",
-        url: dl("rustdesk-1.4.7-x86_64.AppImage"),
+        ...asset("x86_64.AppImage"),
         size: "81.4 MB",
         notes: "chmod +x 后直接运行,免发行版依赖",
       },
@@ -134,17 +131,15 @@ export const RELEASES: PlatformGroup[] = [
     assets: [
       {
         label: "Universal APK",
-        filename: "rustdesk-1.4.7-universal.apk",
         arch: "universal",
-        url: dl("rustdesk-1.4.7-universal.apk"),
+        ...asset("universal.apk"),
         size: "67.6 MB",
         notes: "包含多种架构,体积稍大但兼容性最好",
       },
       {
         label: "ARM64 APK",
-        filename: "rustdesk-1.4.7-aarch64.apk",
         arch: "aarch64",
-        url: dl("rustdesk-1.4.7-aarch64.apk"),
+        ...asset("aarch64.apk"),
         size: "25.4 MB",
       },
     ],
@@ -156,9 +151,8 @@ export const RELEASES: PlatformGroup[] = [
     assets: [
       {
         label: "IPA(未签名,需自签)",
-        filename: "rustdesk-1.4.7-unsigned.ipa",
         arch: "aarch64",
-        url: dl("rustdesk-1.4.7-unsigned.ipa"),
+        ...asset("unsigned.ipa"),
         size: "22.9 MB",
         notes: "需要使用 AltStore / Sideloadly 等工具自签安装",
       },
