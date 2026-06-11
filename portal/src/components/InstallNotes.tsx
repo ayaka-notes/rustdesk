@@ -60,6 +60,25 @@ function MacosGuide() {
   return (
     <>
       <Paragraph style={{ marginBottom: 8 }}>
+        <Text strong>升级 / 重装旧版本前</Text>,建议先卸载旧版并重置权限,否则系统里
+        残留的屏幕录制、辅助功能授权可能失效,导致连上后黑屏或无法控制:
+      </Paragraph>
+      <CodeBlock
+        code={`killall RustDesk 2>/dev/null              # 关掉正在运行的旧版本
+sudo rm -rf /Applications/RustDesk.app    # 删除旧版 App
+tccutil reset ScreenCapture  com.carriez.rustdesk
+tccutil reset Accessibility  com.carriez.rustdesk
+tccutil reset ListenEvent    com.carriez.rustdesk`}
+      />
+      <Paragraph type="secondary" style={{ fontSize: 12, marginTop: 10, marginBottom: 16 }}>
+        首次安装可跳过这一步。后三条分别清掉&nbsp;
+        <Text code style={{ fontSize: 12 }}>屏幕录制</Text>、
+        <Text code style={{ fontSize: 12 }}>辅助功能</Text>、
+        <Text code style={{ fontSize: 12 }}>输入监控</Text>&nbsp;
+        的旧授权,装好新版第一次连接时系统会重新弹窗申请。
+      </Paragraph>
+
+      <Paragraph style={{ marginBottom: 8 }}>
         macOS 默认会拦截未经 Apple 公证的应用,首次打开会提示&nbsp;
         <Text code>"RustDesk" is damaged and can't be opened</Text>{" "}
         或弹出"无法验证开发者"的对话框。在终端执行下面两行就能解除:
