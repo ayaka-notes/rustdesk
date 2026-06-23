@@ -2076,6 +2076,13 @@ jobs:
           sudo apt-get install -y libarchive-tools libfuse2
           # set-up appimage-builder
           # https://github.com/AppImage/AppImageKit/issues/1395
+          # ayaka-temp-pin: setuptools-scm 10.1.2 calls
+          # manifest_maker.ignore_egg_info_dir which Ubuntu 22.04's stock
+          # setuptools lacks, so appimage-builder's egg_info crashes during
+          # `pip install`. Pin <10 until upstream appimage-builder ships a
+          # PEP 517 build (or pins its own setuptools-scm). Revisit on the
+          # next RustDesk version bump and drop this line if it's fixed.
+          sudo pip3 install 'setuptools-scm<10'
           sudo pip3 install git+https://github.com/rustdesk-org/appimage-builder.git
           # run appimage-builder
           pushd appimage
