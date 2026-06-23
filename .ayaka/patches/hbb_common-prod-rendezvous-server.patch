@@ -1,0 +1,16 @@
+diff --git a/src/config.rs b/src/config.rs
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -57,6 +57,11 @@ lazy_static::lazy_static! {
+     static ref TRUSTED_DEVICES: RwLock<(Vec<TrustedDevice>, bool)> = Default::default();
+     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
+-    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("".to_owned());
++    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
++        match option_env!("RUSTDESK_RENDEZVOUS_SERVER") {
++            Some(s) => s,
++            None => "",
++        }.to_owned()
++    );
+     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
+     pub static ref APP_NAME: RwLock<String> = RwLock::new(
+         match option_env!("RUSTDESK_APP_NAME") {
