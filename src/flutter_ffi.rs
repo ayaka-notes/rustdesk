@@ -79,11 +79,6 @@ fn initialize(app_dir: &str, custom_client_config: &str) {
     {
         let _ = crate::common::global_init();
     }
-    #[cfg(not(any(target_os = "android", target_os = "ios")))]
-    {
-        // core_main's init_log does not work for flutter since it is only applied to its load_library in main.c
-        hbb_common::init_log(false, "flutter_ffi");
-    }
 }
 
 #[inline]
