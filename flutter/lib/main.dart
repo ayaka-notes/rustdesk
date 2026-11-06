@@ -36,6 +36,14 @@ WindowType? kWindowType;
 late List<String> kBootArgs;
 
 Future<void> main(List<String> args) async {
+  if (!isDesktop) return _main(args);
+  return runZoned(
+    () => _main(args),
+    zoneSpecification: ZoneSpecification(print: (self, parent, zone, line) {}),
+  );
+}
+
+Future<void> _main(List<String> args) async {
   earlyAssert();
   WidgetsFlutterBinding.ensureInitialized();
 

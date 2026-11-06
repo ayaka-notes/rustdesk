@@ -166,21 +166,6 @@ pub fn core_main() -> Option<CoreMainAction> {
                 || (!click_setup && crate::platform::is_elevated(None).unwrap_or(false)));
         crate::portable_service::client::set_quick_support(_is_quick_support);
     }
-    let mut log_name = "".to_owned();
-    // Keep portable-service logs under a stable directory name.
-    let has_portable_service_shmem_arg = args
-        .iter()
-        .any(|arg| arg.starts_with("--portable-service-shmem-name="));
-    if has_portable_service_shmem_arg {
-        log_name = "portable-service".to_owned();
-    } else if args.len() > 0 && args[0].starts_with("--") {
-        let name = args[0].replace("--", "");
-        if !name.is_empty() {
-            log_name = name;
-        }
-    }
-    hbb_common::init_log(false, &log_name);
-
     // linux uni (url) go here.
     #[cfg(all(target_os = "linux", feature = "flutter"))]
     if args.len() > 0 && args[0].starts_with(&crate::get_uri_prefix()) {
