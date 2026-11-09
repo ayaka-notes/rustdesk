@@ -2,9 +2,7 @@
 //
 // All asset filenames are derived from VERSION via the asset() helper,
 // so a release bump only requires changing VERSION + RELEASE_TAG below.
-// Verify size figures against the GitHub API after bumping — upstream
-// RustDesk CI names a few assets inconsistently (e.g. the macOS dmg
-// carries a doubled arch suffix, which is intentional and preserved).
+// Verify size figures and asset names against the GitHub API after bumping.
 
 export type OsKey = "windows" | "macos" | "linux" | "android" | "ios";
 
@@ -79,14 +77,14 @@ export const RELEASES: PlatformGroup[] = [
       {
         label: "Apple Silicon",
         arch: "aarch64",
-        ...asset("aarch64-aarch64.dmg"),
+        ...asset("aarch64.dmg"),
         size: "24.9 MB",
         notes: "首次打开:右键 → 打开,允许未知开发者",
       },
       {
         label: "Intel",
         arch: "x86_64",
-        ...asset("x86_64-x86_64.dmg"),
+        ...asset("x86_64.dmg"),
         size: "31.1 MB",
       },
     ],
