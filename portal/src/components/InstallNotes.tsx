@@ -64,14 +64,20 @@ function MacosGuide() {
         残留的屏幕录制、辅助功能授权可能失效,导致连上后黑屏或无法控制:
       </Paragraph>
       <CodeBlock
-        code={`killall RustDesk 2>/dev/null              # 关掉正在运行的旧版本
-sudo rm -rf /Applications/RustDesk.app    # 删除旧版 App
+        code={`# 卸载后台服务,并关掉正在运行的旧版本
+launchctl unload -w /Library/LaunchAgents/com.carriez.RustDesk_server.plist 2>/dev/null
+sudo launchctl unload -w /Library/LaunchDaemons/com.carriez.RustDesk_service.plist 2>/dev/null
+sudo rm -f /Library/LaunchAgents/com.carriez.RustDesk_server.plist /Library/LaunchDaemons/com.carriez.RustDesk_service.plist
+sudo pkill -f '/Applications/RustDesk.app/Contents/MacOS/'
+# 重置旧授权(要在删除 App 之前执行)
 tccutil reset ScreenCapture  com.carriez.rustdesk
 tccutil reset Accessibility  com.carriez.rustdesk
-tccutil reset ListenEvent    com.carriez.rustdesk`}
+tccutil reset ListenEvent    com.carriez.rustdesk
+# 删除旧版 App
+sudo rm -rf /Applications/RustDesk.app`}
       />
       <Paragraph type="secondary" style={{ fontSize: 12, marginTop: 10, marginBottom: 16 }}>
-        首次安装可跳过这一步。后三条分别清掉&nbsp;
+        首次安装可跳过这一步。如果旧版安装过后台服务,装好新版后需要重新安装服务。三条 tccutil 分别清掉&nbsp;
         <Text code style={{ fontSize: 12 }}>屏幕录制</Text>、
         <Text code style={{ fontSize: 12 }}>辅助功能</Text>、
         <Text code style={{ fontSize: 12 }}>输入监控</Text>&nbsp;
