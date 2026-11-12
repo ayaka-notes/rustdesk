@@ -22,7 +22,7 @@ export type PlatformGroup = {
   assets: Asset[];
 };
 
-export const VERSION = "1.5.1";
+export const VERSION = "1.5.3";
 
 // GitHub Release this portal links to.
 export const RELEASE_REPO = "ayaka-notes/rustdesk";
